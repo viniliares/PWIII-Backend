@@ -1,7 +1,11 @@
 package br.com.etechoracio.platpet.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,13 +29,25 @@ public class PagamentoController {
 	}
 	
 	@GetMapping
-	public void select(@RequestBody Pagamento pag) {
-		dao.findAll();
+	public List<Pagamento> findAll() {
+		return dao.findAll();
+	}
+	
+	@GetMapping(path = {"/{id}"})
+	public ResponseEntity<Pagamento> findById(@PathVariable Integer id){
+		return dao.findById(id)
+				.map(record -> ResponseEntity.ok().body(record))
+				.orElse(ResponseEntity.notFound().build());
 	}
 	
 	@PutMapping
 	public void update(@RequestBody Pagamento pag) {
 		dao.findById(pag.getId());
 	}
+	
 
+	
+	
+	
 }
+	
