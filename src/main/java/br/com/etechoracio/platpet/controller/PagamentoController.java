@@ -40,9 +40,15 @@ public class PagamentoController {
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@PutMapping
-	public void update(@RequestBody Pagamento pag) {
-		dao.findById(pag.getId());
+	@PutMapping(value="/{id}")
+	public ResponseEntity<Pagamento> update(@PathVariable("id") Integer id,
+											@RequestBody Pagamento pag){
+		return dao.findById(id)
+			.map(record -> {
+				record.setDescpagamento(pag.getDescpagamento());
+				Pagamento updated = dao.save(record);
+				return ResponseEntity.ok().body(updated);
+			}).orElse(ResponseEntity.notFound().build());
 	}
 	
 
